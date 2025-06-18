@@ -1,0 +1,7 @@
+.dashboard__link.active {
+  width: 250px;
+  height: 40px;
+  background-color: #ffffff33;
+  padding: 8px;
+  border-radius: 8px;
+}

@@ -4,6 +4,8 @@ import type { FormProps } from "antd";
 import { useColor } from "../../api/features/hooks/useColor";
 import type { IColor } from "../../shared/types";
 import { Option } from "antd/es/mentions";
+import { useProduct } from "../../api/features/hooks/useProduct";
+import toast from "react-hot-toast";
 
 const { Title } = Typography;
 
@@ -15,14 +17,25 @@ type FieldType = {
   description?: string;
 };
 
-const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-  console.log("Success:", values);
-};
-
 const CreateProducts = () => {
+  const [form] = Form.useForm();
   const { getColors } = useColor();
+  const { createProducts } = useProduct();
+  const { mutate, isPending } = createProducts;
+
+  const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
+    mutate(values, {
+      onSuccess: () => {
+        toast.success("Product is successfully added !");
+        form.resetFields();
+      },
+      onError: () => {
+        toast.error("An error occured while creating product !");
+      },
+    });
+  };
   return (
-    <div>
+    <div className="p-5">
       <Title
         style={{ color: "#427DC0", fontSize: "28px", fontWeight: "bold" }}
         level={3}>
@@ -31,6 +44,7 @@ const CreateProducts = () => {
       <div className="max-w-[550px] bg-white shadow p-6 rounded-2xl mt-5 mx-auto">
         <Title level={3}>Create Product</Title>
         <Form
+          form={form}
           name="product-form"
           layout="vertical"
           onFinish={onFinish}
@@ -88,6 +102,7 @@ const CreateProducts = () => {
 
           <Form.Item>
             <Button
+              loading={isPending}
               type="primary"
               htmlType="submit"
               className="w-full"

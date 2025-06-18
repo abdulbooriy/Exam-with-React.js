@@ -6,7 +6,7 @@ export const useColor = () => {
 
   const getColors = useQuery({
     queryKey: ["colors"],
-    queryFn: () => Color.getColors,
+    queryFn: Color.getColors,
   });
 
   const createColors = useMutation({

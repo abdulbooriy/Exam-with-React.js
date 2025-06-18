@@ -1,13 +1,11 @@
 import React from "react";
-import Dashboard from "./pages/dashboard/Dashboard";
-// import MainRouters from "./pages/layout/index";
 import { Toaster } from "react-hot-toast";
+import MainRouters from "./pages/index";
 
 const App = () => {
   return (
     <div>
-      <Dashboard />
-      {/* <MainRouters /> */}
+      <MainRouters />
       <Toaster position="top-center" reverseOrder={false} />
     </div>
   );

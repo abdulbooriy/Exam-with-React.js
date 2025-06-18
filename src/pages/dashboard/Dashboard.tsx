@@ -1,88 +1,47 @@
-import React, { useState } from "react";
-import {
-  BgColorsOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  ProductOutlined,
-} from "@ant-design/icons";
-import { Button, Layout, Menu, theme, Typography } from "antd";
-// import CreateProducts from "../createProducts/CreateProducts";
-import Colors from "../colors/Colors";
-// import Products from "../products/Products";
+import { NavLink, Outlet } from "react-router-dom";
+import { AiOutlineBgColors } from "react-icons/ai";
+import { TbCategoryPlus } from "react-icons/tb";
+import { CiEdit } from "react-icons/ci";
 
-const { Header, Sider, Content } = Layout;
-const { Title } = Typography;
+import "./style.css";
 
 const Dashboard = () => {
-  const [collapsed, setCollapsed] = useState(false);
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
-
   return (
-    <div>
-      <Layout>
-        <Sider trigger={null} collapsible collapsed={collapsed}>
-          <div className="p-4">
-            <Title style={{ color: "white" }} level={3}>
-              LOGOO
-            </Title>
-          </div>
-          <div className="demo-logo-vertical" />
-          <Menu
-            theme="dark"
-            mode="inline"
-            defaultSelectedKeys={["1"]}
-            items={[
-              {
-                key: "1",
-                icon: <ProductOutlined />,
-                label: "Create Products",
-              },
-              {
-                key: "2",
-                icon: <ProductOutlined />,
-                label: "Products",
-              },
-              {
-                key: "3",
-                icon: <BgColorsOutlined />,
-                label: "Colors",
-              },
-            ]}
-          />
-        </Sider>
-        <Layout>
-          <Header style={{ padding: 0, background: colorBgContainer }}>
-            <Button
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-              style={{
-                fontSize: "16px",
-                width: 64,
-                height: 64,
-              }}
-            />
-          </Header>
-          <Content
-            style={{
-              margin: "24px 16px",
-              padding: 24,
-              minHeight: 280,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-              height: "100vh",
-              overflowY: "auto",
-            }}>
-            {/* <CreateProducts /> */}
-            <Colors />
-            {/* <Products /> */}
-          </Content>
-        </Layout>
-      </Layout>
+    <div className="flex h-screen overflow-hidden">
+      <div className="w-[300px] h-screen bg-[#427DC0]  flex-shrink-0">
+        <ul className="text-white flex flex-col gap-5 px-[20px] font-semibold text-[18px] pt-[30px]">
+          <li className="text-[28px] mb-5">LOGOO</li>
+          <li>
+            <NavLink
+              className="dashboard__link flex items-center gap-4"
+              to={"create-products"}>
+              <TbCategoryPlus className="text-2xl" />
+              Create Products
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              className="dashboard__link flex items-center gap-4"
+              to={"products"}>
+              <CiEdit className="text-2xl" />
+              Manage Products
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              className="dashboard__link flex gap-4 items-center"
+              to={"colors"}>
+              <AiOutlineBgColors className="text-2xl" />
+              Colors
+            </NavLink>
+          </li>
+        </ul>
+      </div>
+      <div className="flex-1 overflow-y-auto">
+        <Outlet />
+      </div>
     </div>
   );
 };
 
-export default React.memo(Dashboard);
+export default Dashboard;

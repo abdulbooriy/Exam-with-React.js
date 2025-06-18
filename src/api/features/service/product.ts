@@ -1,6 +1,6 @@
 import api from "../..";
 
-export const getProducts = api.get("/products");
+export const getProducts = () => api.get("/products");
 export const createProducts = (body: any) => api.post("/products", body);
 export const updateProducts = ({ id, body }: { id: string; body: any }) =>
   api.put(`/products/${id}`, body);

@@ -13,39 +13,47 @@ type FieldType = {
 };
 
 const Colors = () => {
+  const [form] = Form.useForm();
   const { createColors, getColors, deleteColors } = useColor();
+  const { data } = getColors;
+  const { mutate, isPending } = createColors;
 
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-    createColors.mutate(values, {
+    mutate(values, {
       onSuccess: () => {
         toast.success("Color is successfully added !");
+        form.resetFields();
+      },
+      onError: () => {
+        toast.error("An error occured whilw creating color !");
       },
     });
   };
 
   const handleDelete = (id: string) => {
-    deleteColors.mutate(id, {
-      onSuccess: () => {
-        toast.success("Color is successfully deleted!");
-      },
-      onError: () => {
-        toast.error("An error occured while deleting the Color !");
-      },
-    });
+    if (confirm("Are you sure you want to delete this color ?")) {
+      deleteColors.mutate(id, {
+        onSuccess: () => {
+          toast.success("Color is successfully deleted!");
+        },
+        onError: () => {
+          toast.error("An error occured while deleting the Color !");
+        },
+      });
+    }
   };
 
   return (
-    <div>
+    <div className="p-5">
       <Title
         style={{ color: "#427DC0", fontSize: "28px", fontWeight: "bold" }}
         level={3}>
         Manage Colors
       </Title>
       <div className="max-w-[500px] bg-white shadow p-6 rounded-2xl mt-10">
-        <Title level={3}>
-          Create Color
-        </Title>
+        <Title level={3}>Create Color</Title>
         <Form
+          form={form}
           name="product-form"
           layout="vertical"
           onFinish={onFinish}
@@ -60,6 +68,7 @@ const Colors = () => {
 
           <Form.Item<FieldType>>
             <Button
+              loading={isPending}
               type="primary"
               htmlType="submit"
               className="w-full"
@@ -70,7 +79,7 @@ const Colors = () => {
         </Form>
       </div>
       <div className="flex flex-wrap mt-[53px] gap-5">
-        {getColors.data?.data?.map((color: IColor) => (
+        {data?.data?.map((color: IColor) => (
           <div key={color.id}>
             <div className="w-[250px] h-[60px] bg-[#FFFFFF] rounded-[5px] shadow p-4 flex justify-between">
               <h3 className="text-xl">{color?.name}</h3>
